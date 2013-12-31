@@ -37,6 +37,12 @@ class ToJPEG:
 											step_incr = 1,
 											page_incr = 10)
 		self.adv_jpeg_quality_slider	= gtk.HScale(self.adv_jpeg_quality_adjust)
+		
+		# Use our own magic data file, as we don't want to require one be pre
+		# installed.
+		self.magic			= magic.Magic(
+									mime=True, 
+									magic_file=os.path.join('.', 'share', 'misc', 'magic') )
 
 		self.window = gtk.Window(gtk.WINDOW_TOPLEVEL)
 		self.window.set_title('Convert to JPEG')
@@ -248,7 +254,8 @@ class ToJPEG:
 		if not isinstance(giofile, gio.File):
 			giofile = gio.File(giofile)
 
-		return magic.from_file(giofile.get_path(), mime=True) == 'image/jpeg'
+		
+		return self.magic.from_file( giofile.get_path() ) == 'image/jpeg'
 
 	def save_image_as_jpeg(self, output_giofile=None):
 		if self.img_pbuf is None:
