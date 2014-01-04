@@ -68,6 +68,8 @@ class ToJPEG:
 				def_width	= int(def_height / def_ratio)
 
 		self.window.set_default_size(def_width, def_height)
+		
+		self.adv_delete_orig_checkbox.set_active(self.delete_orig)
 
 		hbox = gtk.HBox(spacing=3)
 		hbox.set_border_width(3)
@@ -174,6 +176,7 @@ class ToJPEG:
 	def on_convert_clicked(self, button):
 		try:
 			self.save_image_as_jpeg()
+			self.button.set_sensitive(False)
 		except Exception as e:
 			self.show_error(str(e))
 
